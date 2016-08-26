@@ -31,8 +31,7 @@ RUN dpkg --add-architecture i386 && apt-get update \
     virtualenvwrapper \
     python-lzma \
     wget \
-    vim \
-    sudo
+    vim
 
 # binwalk
 RUN git clone https://github.com/devttys0/binwalk.git \
@@ -84,5 +83,13 @@ RUN touch ~/.bash_history \
     && cd ~/.dotfiles \
     && make all
 
+# Fix nouse leading lines in tmux.conf
+RUN sed -i -e '1,5d' ~/.dotfiles/tmux.conf
+
+# Clean up APT when done.
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 # qira
 EXPOSE 3002 3003 4000
+
+CMD ["/bin/bash"]
