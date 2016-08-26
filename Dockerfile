@@ -31,7 +31,8 @@ RUN dpkg --add-architecture i386 && apt-get update \
     virtualenvwrapper \
     python-lzma \
     wget \
-    vim
+    vim \
+    sudo
 
 # binwalk
 RUN git clone https://github.com/devttys0/binwalk.git \
