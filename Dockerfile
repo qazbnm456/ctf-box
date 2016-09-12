@@ -1,6 +1,17 @@
 FROM phusion/baseimage:latest
 MAINTAINER Boik Su <boik@tdohacker.org>
 
+# Build-time metadata as defined at http://label-schema.org
+ARG BUILD_DATE
+ARG VCS_REF
+LABEL org.label-schema.build-date=$BUILD_DATE \
+    org.label-schema.docker.dockerfile="/Dockerfile" \
+    org.label-schema.license="MIT" \
+    org.label-schema.name="qazbnm456/ctf-box" \
+    org.label-schema.vcs-ref=$VCS_REF \
+    org.label-schema.vcs-type="Git" \
+    org.label-schema.vcs-url="https://github.com/qazbnm456/ctf-box"
+
 WORKDIR /root
 
 RUN dpkg --add-architecture i386 && apt-get update \
@@ -32,7 +43,8 @@ RUN dpkg --add-architecture i386 && apt-get update \
     python-lzma \
     wget \
     vim \
-    sudo
+    sudo \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # binwalk
 RUN git clone https://github.com/devttys0/binwalk.git \
@@ -43,7 +55,8 @@ RUN git clone https://github.com/devttys0/binwalk.git \
 RUN git clone https://github.com/BinaryAnalysisPlatform/qira.git \
     && cd qira/ \
     && ./install.sh \
-    && ./fetchlibs.sh
+    && ./fetchlibs.sh \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # tmux 2.0
 RUN wget -qO- https://github.com/tmux/tmux/releases/download/2.2/tmux-2.2.tar.gz | gunzip | tar x \
@@ -86,9 +99,6 @@ RUN touch ~/.bash_history \
 
 # Fix nouse leading lines in tmux.conf
 RUN sed -i -e '1,5d' ~/.dotfiles/tmux.conf
-
-# Clean up APT when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # qira
 EXPOSE 3002 3003 4000
