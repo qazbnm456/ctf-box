@@ -44,7 +44,7 @@ RUN dpkg --add-architecture i386 && apt-get update \
     wget \
     vim \
     sudo \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # binwalk
 RUN git clone https://github.com/devttys0/binwalk.git \
