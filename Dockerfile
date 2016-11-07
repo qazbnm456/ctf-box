@@ -58,10 +58,10 @@ RUN git clone https://github.com/BinaryAnalysisPlatform/qira.git \
     && ./fetchlibs.sh \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# tmux 2.0
-RUN wget -qO- https://github.com/tmux/tmux/releases/download/2.2/tmux-2.2.tar.gz | gunzip | tar x \
-    && cd tmux-2.2 && ./configure && make -j && make install \
-    && cd && rm -rf tmux-2.2
+# tmux 2.3
+RUN wget -qO- https://github.com/tmux/tmux/releases/download/2.3/tmux-2.3.tar.gz | gunzip | tar x \
+    && cd tmux-2.3 && ./configure && make -j && make install \
+    && cd && rm -rf tmux-2.3
 
 # peda
 RUN git clone https://github.com/longld/peda.git ~/.peda
@@ -91,14 +91,21 @@ RUN git clone https://github.com/Z3Prover/z3 \
 # angr
 RUN pip install angr
 
+# mono
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
+    && echo "deb http://download.mono-project.com/repo/debian wheezy main" \
+    | tee /etc/apt/sources.list.d/mono-xamarin.list \
+    && apt-get update \
+    && apt-get install -y \
+    mono-complete \
+    ca-certificates-mono \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 # dotfiles by L4ys
 RUN touch ~/.bash_history \
     && git clone https://github.com/L4ys/dotfiles.git ~/.dotfiles \
     && cd ~/.dotfiles \
     && make all
-
-# Fix nouse leading lines in tmux.conf
-RUN sed -i -e '1,5d' ~/.dotfiles/tmux.conf
 
 # qira
 EXPOSE 3002 3003 4000
