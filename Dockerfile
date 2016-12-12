@@ -105,7 +105,8 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # dotfiles by L4ys
-RUN touch ~/.bash_history ~/known_hosts ~/config \
+RUN touch ~/.bash_history \
+    && touch  ~/.ssh/known_hosts ~/.ssh/config \
     && git clone https://github.com/L4ys/dotfiles.git ~/.dotfiles \
     && cd ~/.dotfiles \
     && make all
