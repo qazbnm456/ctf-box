@@ -104,6 +104,12 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
     ca-certificates-mono \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# wine
+RUN apt-get update \
+    && apt-get install -y wine \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    && rm -rf /home/wine/.cache
+
 # dotfiles by L4ys
 RUN touch ~/.bash_history \
     && touch  ~/.ssh/known_hosts ~/.ssh/config \
@@ -112,6 +118,6 @@ RUN touch ~/.bash_history \
     && make all
 
 # qira
-EXPOSE 3002 3003 4000
+EXPOSE 80 3002 3003 4000
 
 CMD ["/bin/bash"]
