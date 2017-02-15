@@ -1,5 +1,5 @@
 FROM phusion/baseimage:latest
-MAINTAINER Boik Su <boik@tdohacker.org>
+LABEL maintainer="Boik Su <boik@tdohacker.org>"
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
@@ -105,10 +105,10 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # wine
-RUN apt-get update \
-    && apt-get install -y wine \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && rm -rf /home/wine/.cache
+RUN add-apt-repository ppa:wine/wine-builds -y \
+    && apt-get update \
+    && apt-get install --install-recommends winehq-staging -y \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # dotfiles by L4ys
 RUN touch ~/.bash_history \
